@@ -1,0 +1,155 @@
+#Conditiona rendering
+const Items = ({name,isPacked}) => {
+    return(
+        <li>
+            {isPacked ? (
+                <del>
+                    {name}
+                </del>
+            ) : 
+            name
+            }
+        </li>
+    )
+
+}
+const PackingList = () => {
+    return (
+        <div>
+            <Items
+                isPacked={true}
+                name="space suit"
+            />
+            <Items
+                isPacked={true}
+                name="space suit"
+            />
+            <Items
+                isPacked={false}
+                name="space suit"
+            />
+            <Items
+                isPacked={false}
+                name="space suit"
+            />
+        </div>
+    )
+}
+export default PackingList
+
+#Render by looping
+import React from 'react'
+
+const RenderByLooping = () => {
+    const fruits = ["Apple","banana","orange"]
+  return (
+    <div>
+        <ul>
+            {fruits.map((items) => (
+                <li key={items}>
+                    {items}
+                </li>
+            ))}
+        </ul>
+    </div>
+  )
+}
+
+export default RenderByLooping
+
+#UseState demonstration
+import React, { useState } from 'react'
+
+const UseStateDemo = () => {
+  const [color,setColor] = useState("red")
+  return (
+    <div>
+      <h1>My fav color is {color}</h1>
+      <button onClick={() => setColor("blue")}>blue</button>
+      <button onClick={() => setColor("orange")}>orange</button>
+      <button onClick={() => setColor("yellow")}>yellow</button>
+      <button onClick={() => setColor("green")}>green</button>
+    </div>
+  )
+}
+
+export default UseStateDemo
+
+# UseEffect & api call Demonstration
+
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+
+const UseEffectDemo = () => {
+    const [userData, setUserData] = useState(null)
+
+    const handleget = async () => {
+        const response = await axios.get("https://jsonplaceholder.typicode.com/users")
+        setUserData(response.data)
+    }
+    useEffect (() => {
+        handleget()
+    },[])
+  return (
+    <div>
+        <ul>
+            {
+                userData && userData.map((it) => (
+                    <li key={it.id}>
+                        <p>{it.name}</p>
+                        <p>{it.username}</p>
+                        <p>{it.email}</p>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+  )
+}
+
+export default UseEffectDemo
+
+#UseContext Demonstration
+
+import React, { createContext, useContext, useState } from 'react'
+const userContext = createContext()
+const Component1 = () => {
+    const [user, setUser] = useState("mani")
+  return (
+    <div>
+        <h1>component1</h1>
+        <userContext.Provider value={user}>
+            <h1>{`hello ${user}`}</h1>
+            <Component2/>
+        </userContext.Provider>
+    </div>
+  )
+}
+const Component2 = () => {
+  return (
+    <div>
+        <h1>component2</h1>
+        <Component3/>
+    </div>
+  )
+}
+const Component3 = () => {
+  return (
+    <div>
+        <h1>Component3</h1>
+        <Component4/>
+    </div>
+  )
+}
+const Component4 = () => {
+    const user = useContext(userContext)
+  return (
+    <div>
+        <h1>Component4</h1>
+        <h2>{`hello ${user} again`}</h2>
+    </div>
+  )
+}
+
+export default Component1
+
